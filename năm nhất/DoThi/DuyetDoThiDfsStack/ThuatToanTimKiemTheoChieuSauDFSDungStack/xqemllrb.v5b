@@ -1,0 +1,56 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ThuatToanTimKiemTheoChieuSauDFSDungStack
+{
+    class Program
+    {
+        // đọc file
+        public static List<string> DocFile()
+        {
+           string path = "D:\\input.txt";
+            FileStream fs = new FileStream(path, FileMode.Open);
+            StreamReader rd = new StreamReader(fs, Encoding.UTF8);
+            string fileString = rd.ReadToEnd();
+            var list = new List<string>();
+            var xx = fileString.Split('\r');
+            for (int i = 0; i < xx.Length; i++)
+            {
+                if ((xx[i]) != "\n")
+                    list.Add(xx[i]);
+            }
+            rd.Close();
+            return list;
+        }
+
+        static void Main(string[] args)
+        {
+            var s = DocFile();
+            
+            var soDinh = int.Parse(s[0]);
+            var arr = new int[soDinh+1,soDinh+1];
+            for (int i = 1; i < s.Count; i++)
+            {
+                var dong = s[i].Split(' ');
+                arr[int.Parse(dong[0]) , int.Parse(dong[1]) ] = 1;
+                arr[int.Parse(dong[1]) , int.Parse(dong[0]) ] = 1;
+            }
+            var tt = new ThuatToanDfs();
+            tt.canh=arr;
+            tt.ThuatToanDfsabc(tt.bd);
+            foreach (var item in tt.diemTrenduongDi)
+            {
+                if (item == 0)
+                    continue;
+                Console.WriteLine(item + "\t");
+            }
+
+            Console.WriteLine(tt.bd);
+            Console.ReadKey();
+        }
+    }
+}
